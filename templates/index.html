@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #calculadora {
+            width: 200px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        button {
+            width: 45%;
+            padding: 10px;
+            margin: 5px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div id="calculadora">
+        <form id="formularioCalculadora">
+            <input type="text" id="numero1" placeholder="Número 1" required>
+            <input type="text" id="numero2" placeholder="Número 2" required>
+            <br>
+            <button type="button" onclick="calcular('+')">+</button>
+            <button type="button" onclick="calcular('-')">-</button>
+            <button type="button" onclick="calcular('*')">*</button>
+            <button type="button" onclick="calcular('/')">/</button>
+        </form>
+        <div id="resultado"></div>
+    </div>
+
+    <script>
+        async function calcular(operacion) {
+            const numero1 = document.getElementById('numero1').value;
+            const numero2 = document.getElementById('numero2').value;
+
+            const respuesta = await fetch('http://127.0.0.1:5000/calcular', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ numero1, numero2, operacion })
+            });
+
+            const data = await respuesta.json();
+            document.getElementById('resultado').textContent = "Resultado: " + data.resultado;
+        }
+    </script>
+</body>
+</html>
